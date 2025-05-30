@@ -1,96 +1,133 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@font-face {
+    font-family: D-DIN;
+    font-weight: bold;
+    src: url("/fonts/D-DIN-Bold.otf") format("opentype");
+}
+@font-face {
+    font-family: D-DIN;
+    font-weight: normal;
+    src: url("/fonts/D-DIN.otf") format("opentype");
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    font-family: D-DIN, "Cal Sans", sans-serif;
+    font-weight: 200;
+    font-style: normal;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+#RightView{
+    box-shadow: -4px 0 0 white;
+    /*
+    This makes the vertical separator, but one side is slightly smaller than the other
+    */
 }
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+#LeftView, #RightView{
+    width: 50vw;
+    height: 85vh;
+    position: absolute;
+    overflow: hidden;
+    outline: 0px solid red;
+    outline-offset: -2px;
+    padding: 20px;
+    background-color: rgb(58, 58, 58);
+    color: white;
+}
+#LeftView{
+    left: 0;
+}
+#RightView{
+    right: 0;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+#LeftView canvas, #RightView canvas{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+#LeftView div, #RightView div{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #f7df1eaa);
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+#LeftView div *, #RightView div *{
+    width: fit-content;
+    z-index: 1;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+form{
+    display: flex;
+    flex-direction: column;
+    width: 10vw;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
+h1, h2, h3, h4, h5, h6, #clock{
+    font-family: D-DIN;
+    font-weight: bold;
+}
+
+.error{
+    font-size: large;
+    font-family: D-DIN;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
     background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+    border: solid 2px rgb(0, 0, 0);
+    border-radius: 8px;
+    padding: 8px;
+    z-index: 100;
+}
+
+
+
+
+
+footer{
+    position: absolute;
+    display: flex;
+    width: 100vw;
+    height: 15vh;
+    bottom: 0;
+    outline: 0px solid purple;
+    outline-offset: -2px;
+}
+#SHData{
+    height: 100%;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+#SHPropLevelPlace{
+    display: flex;
+    flex-direction: row;
+}
+
+#SHPropLevel{
+    width: 150px;
+}
+
+#engineLayout {
+    color: red;
+    margin: 0.5vw;
+}
+
+
+
+
+
+
+.error{
+    display: none;
 }

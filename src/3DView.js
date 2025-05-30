@@ -194,9 +194,9 @@ function animate2(time, frame){
 
 const loader = new GLTFLoader();
 // The loader might only need the URL (but not with npm and vite)
-const boosterModelURL = new URL('./dependencies/models/booster_raw.glb', import.meta.url);
-const gridfinModelURL = new URL('./dependencies/models/gridfin_raw.glb', import.meta.url);
-const raptorModelURL = new URL('./dependencies/models/raptor_raw.glb', import.meta.url);
+const boosterModelURL = new URL('/models/booster_raw.glb', import.meta.url);
+const gridfinModelURL = new URL('/models/gridfin_raw.glb', import.meta.url);
+const raptorModelURL = new URL('/models/raptor_raw.glb', import.meta.url);
 
 // Loading SuperHeavy booster
 loader.load(boosterModelURL.href, (root) => {
