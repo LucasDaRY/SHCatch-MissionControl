@@ -1,13 +1,16 @@
 {
-  "name": "remote_control_ws",
-  "version": "1.0.0",
-  "description": "",
-  "main": "3DView.js",
+  "name": "shcatch-missioncontrol",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "author": "",
-  "license": "ISC",
+  "devDependencies": {
+    "vite": "^6.3.5"
+  },
   "dependencies": {
     "three": "^0.176.0"
   }
