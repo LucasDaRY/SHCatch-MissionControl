@@ -1,0 +1,14 @@
+{
+  "name": "remote_control_ws",
+  "version": "1.0.0",
+  "description": "",
+  "main": "3DView.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.176.0"
+  }
+}

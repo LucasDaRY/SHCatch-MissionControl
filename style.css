@@ -1,0 +1,133 @@
+@font-face {
+    font-family: D-DIN;
+    font-weight: bold;
+    src: url("dependencies/fonts/D-DIN-Bold.otf") format("opentype");
+}
+@font-face {
+    font-family: D-DIN;
+    font-weight: normal;
+    src: url("dependencies/fonts/D-DIN.otf") format("opentype");
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    font-family: D-DIN, "Cal Sans", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+}
+
+#RightView{
+    box-shadow: -4px 0 0 white;
+    /*
+    This makes the vertical separator, but one side is slightly smaller than the other
+    */
+}
+
+#LeftView, #RightView{
+    width: 50vw;
+    height: 85vh;
+    position: absolute;
+    overflow: hidden;
+    outline: 0px solid red;
+    outline-offset: -2px;
+    padding: 20px;
+    background-color: rgb(58, 58, 58);
+    color: white;
+}
+#LeftView{
+    left: 0;
+}
+#RightView{
+    right: 0;
+}
+
+#LeftView canvas, #RightView canvas{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+#LeftView div, #RightView div{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+#LeftView div *, #RightView div *{
+    width: fit-content;
+    z-index: 1;
+}
+
+
+form{
+    display: flex;
+    flex-direction: column;
+    width: 10vw;
+}
+
+h1, h2, h3, h4, h5, h6, #clock{
+    font-family: D-DIN;
+    font-weight: bold;
+}
+
+.error{
+    font-size: large;
+    font-family: D-DIN;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    background-color: #ffffff;
+    border: solid 2px rgb(0, 0, 0);
+    border-radius: 8px;
+    padding: 8px;
+    z-index: 100;
+}
+
+
+
+
+
+footer{
+    position: absolute;
+    display: flex;
+    width: 100vw;
+    height: 15vh;
+    bottom: 0;
+    outline: 0px solid purple;
+    outline-offset: -2px;
+}
+#SHData{
+    height: 100%;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+#SHPropLevelPlace{
+    display: flex;
+    flex-direction: row;
+}
+
+#SHPropLevel{
+    width: 150px;
+}
+
+#engineLayout {
+    color: red;
+    margin: 0.5vw;
+}
+
+
+
+
+
+
+.error{
+    display: none;
+}
