@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
+import { randFloat } from 'three/src/math/MathUtils';
 
 const clock = new THREE.Clock(true);
 const clockDOM = document.getElementById("clock");
@@ -58,8 +59,9 @@ const DOMSimErr = document.getElementById("SimErr");
 DOMSimErr.style.visibility = "hidden";
 
 const scene = new THREE.Scene();
-const SHcamera = new THREE.PerspectiveCamera( 75, DOMView.offsetWidth / DOMView.offsetHeight, 0.1, 100000 );
-const camera = new THREE.PerspectiveCamera( 75, DOMView.offsetWidth / DOMView.offsetHeight, 0.1, 100000 );
+const SHcamera = new THREE.PerspectiveCamera( 75, DOMView.offsetWidth / DOMView.offsetHeight, 0.1, 1000000 );
+SHcamera.position.set(0,0,6000);
+const camera = new THREE.PerspectiveCamera( 75, DOMView.offsetWidth / DOMView.offsetHeight, 0.1, 1000000 );
 scene.add(camera);
 
 const renderer = new THREE.WebGLRenderer({
@@ -91,13 +93,14 @@ scene.add(axesHelper);
 
 const SHRef = new THREE.Object3D();
 SHRef.position.set(0,9000, 0);
-camera.position.set(2000, 8000, 15000);
+camera.position.set(6000, 1000, 15000);
 controls.target.add(SHRef.position);
 controls.update();
 const SHWrapper = new THREE.Object3D();
 SHRef.add(SHWrapper);
 SHRef.add(SHcamera);
 scene.add(SHRef);
+
 let SHGrids = [];
 /* Grid Order
          BQD
@@ -113,13 +116,30 @@ let SHRaptors = [];
 
 let SHLastPos = new THREE.Vector3(0,0,0);
 SHLastPos.copy(SHRef.position);
-/*let SHTrajectoryPath = new THREE.CurvePath();
-const SHTrajectoryMat = new THREE.LineBasicMaterial( { color: 0xff0000 } );
-const points = SHTrajectoryPath.getPoints( 50 );
-const geometry = new THREE.BufferGeometry().setFromPoints( points );
-let SHTrajectory = new THREE.Line(geometry, SHTrajectoryMat);
-scene.add(SHTrajectory);*/
 
+let SHPos = Array(20);
+for(let i = 0 ; i < 20 ; i++){
+	SHPos[i] = SHRef.position.clone()
+}
+
+// Point init with random point, to see the initial line
+const pathMat = new THREE.LineBasicMaterial({
+	color: 0xffffff,
+	opacity: 1,
+});
+
+
+function drawSHTrajectory(){
+
+	let pathGeom = new THREE.BufferGeometry().setFromPoints([SHLastPos, SHRef.position.clone()]);
+	SHLastPos.copy(SHRef.position);
+	let splineObj = new THREE.Line(pathGeom, pathMat);
+	scene.add(splineObj);
+
+	setTimeout(() => {
+		drawSHTrajectory()
+	}, 1000); // Every 500 ms, this function executes
+}
 
 
 
@@ -128,25 +148,9 @@ function animate(time, frame) {
   camera.updateProjectionMatrix();
   if(eltLoaded == 18){
 
-    clockDOM.innerText = Math.floor(clock.getElapsedTime() / 60) + ":" + (clock.getElapsedTime() % 60).toFixed(0);
-
-    const start = SHLastPos;
-    const end = SHRef.position;
-    const points = new THREE.LineCurve3(start, end).getPoints(2);
-    const curveGeom = new THREE.BufferGeometry().setFromPoints(points);
-    const curveMat = new THREE.LineBasicMaterial({
-        color: 0xffffff,
-    })
-    const curve = new THREE.Line(curveGeom, curveMat);
-    scene.add(curve);
-    SHLastPos.copy(SHRef.position);
-
-
-
-
-
-
-
+	let minutes = clock.getElapsedTime() / 60;
+	let seconds = clock.getElapsedTime() % 60;
+    clockDOM.innerText = ((minutes < 10) ? "0" : "") + Math.floor(minutes) + ":" + ((seconds < 10) ? "0" : "") + seconds.toFixed(1);
 
 
     for(let gridNum = 0 ; gridNum < 4 ; gridNum++){
@@ -172,23 +176,28 @@ function animate(time, frame) {
     for(let i = 0 ; i < 13 ; i++){
         raptorThrust[i] = 70 + 30 * Math.cos(time * 0.01);
     }
-    SHRef.position.y += 5; // Use this to move SuperHeavy
+	// This is a part where I'm messing around, just for it not to look the same at all time while developing this shit
+    SHRef.position.z += 5;
+	let z_up = new THREE.Vector3();
+	SHWrapper.getWorldDirection(z_up);
+	let booster_quat = new THREE.Quaternion();
+	SHWrapper.getWorldQuaternion(booster_quat);
+	z_up.applyQuaternion(booster_quat.multiply(new THREE.Quaternion(1, 0, 0, -Math.PI/4)));
+    SHRef.position.add(z_up.multiplyScalar(5)); // Use this to move SuperHeavy
     
     // Use this to rotate SuperHeavy
-    SHWrapper.rotation.x += 0.0005; // Yaw
-    SHWrapper.rotation.y += 0.0005; // roll
-    SHWrapper.rotation.z += 0.001; // Pitch
-    
-    //controls.target.set(SHRef.position);
-    //controls.update();
-    SHWrapper.visible = true;
+    //SHWrapper.rotation.x += 0.0005; // Yaw
+    //SHWrapper.rotation.y += 0.0005; // roll
+    SHWrapper.rotation.z += randFloat(-0.001, 0.0015); // Pitch
+
+    //SHWrapper.visible = true;
     renderer.render( scene, SHcamera );
   }
 
 }
 
 function animate2(time, frame){
-    SHWrapper.visible = false;
+    //SHWrapper.visible = false;
     renderer2.render(scene, camera);
 }
 
@@ -326,31 +335,31 @@ for(let i = 0 ; i < 10 ; i++){
 }
 
 // Loading Tower (a big cube for now)
-const cubeGeom = new THREE.BoxGeometry(1500, 15000, 1500);
-const cubeMat = new THREE.MeshPhysicalMaterial({
-    color: 0xb9bcbd
-})
-const cube = new THREE.Mesh(cubeGeom, cubeMat);
+const cube = new THREE.Mesh(
+	new THREE.BoxGeometry(1500, 15000, 1500),
+	new THREE.MeshPhysicalMaterial({
+    	color: 0xb9bcbd
+	})
+);
 cube.position.set(3000, 15000/2, 0); // 10000 is half of the cube size (temp fix)
 cube.rotateY(Math.PI/4);
 cube.name = "Tower";
 scene.add(cube);
 
 // Adding wireframe floor (make it a little synthwave hmmm)
-const floorGeom = new THREE.PlaneGeometry(1000000,1000000, 500, 500);
-const floorMat = new THREE.MeshBasicMaterial({
-    color: 0x111111,
-    wireframe: true
-})
-const floor = new THREE.Mesh(floorGeom, floorMat);
+const floor = new THREE.Mesh(
+	new THREE.PlaneGeometry(1000000,1000000, 500, 500),
+	new THREE.MeshBasicMaterial({
+		color: 0x111111,
+		wireframe: true
+	})
+);
 floor.name = "Floor";
 floor.rotateX(Math.PI/2);
 scene.add(floor);
 
-SHcamera.position.set(0,0,6000);
-//camera.rotation.set(0,0,0);
-//
-//controls.update();
+
+
 
 const light = new THREE.SpotLight(0xFFFFFF, 10, 15000);
 light.decay = 0;
@@ -374,3 +383,5 @@ window.addEventListener("resize", (e) => {
     renderer.setSize(DOMView.offsetWidth, DOMView.offsetHeight);
     renderer2.setSize(DOMView.offsetWidth, DOMView.offsetHeight);
 });
+
+drawSHTrajectory();
