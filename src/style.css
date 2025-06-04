@@ -9,6 +9,13 @@
     src: url("/fonts/D-DIN.otf") format("opentype");
 }
 
+@keyframes glow {
+    to {
+        text-shadow: 0 0 10px blue;
+    }
+}
+
+
 *{
     margin: 0;
     padding: 0;
@@ -18,6 +25,13 @@
     font-family: D-DIN, "Cal Sans", sans-serif;
     font-weight: 200;
     font-style: normal;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+a:hover{
+    animation: glow 2s infinite alternate;
 }
 
 #RightView{
@@ -70,7 +84,7 @@ form{
     width: 10vw;
 }
 
-h1, h2, h3, h4, h5, h6, #clock{
+h1, h2, h3, h4, h5, h6, #clock, label{
     font-family: D-DIN;
     font-weight: bold;
 }
@@ -100,9 +114,18 @@ footer{
     outline: 0px solid purple;
     outline-offset: -2px;
 }
+
+#LeftData{
+    display: flex;
+    flex-direction: row;
+    width: 40vw;
+}
+#engineLayout{
+    width: 15vh;
+    height: 15vh;
+}
 #SHData{
     height: 100%;
-    width: 400px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -114,20 +137,62 @@ footer{
     flex-direction: row;
 }
 
-#SHPropLevel{
-    width: 150px;
+#SHPropLevel[value]{
+    -webkit-appearance:none;
+    -moz-appearance:none;        
+    appearance: none;
+
+    margin-left: 8px;
+    width: 100px;
+    align-self: center;
+    height: 8px;
+    border-radius: 10em;
+    background-color: lightgray;
+    outline: 2px solid black;
+    outline-offset: -2px;
+}
+#SHPropLevel[value]::-moz-progress-bar{
+    background-color: black;
 }
 
-#engineLayout {
-    color: red;
-    margin: 0.5vw;
+
+#MissionData{
+    text-wrap: nowrap;
+    margin-top: 3vh;
+    width: 20vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+#RightData{
+    margin: 1vh;
+    display: flex;
+    flex-direction: column;
+    width: 40vw;
+    gap: 8px;
+}
+#RightDataTop{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+#RightDataTop h3{
+    width: 200px;
+    text-wrap: nowrap;
+}
+
+#RightDataBottom{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 
 
 
-
-
+/* Temporary, only for interface development */
 .error{
     display: none;
 }
