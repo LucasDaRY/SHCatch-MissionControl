@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { ViewHelper } from 'three/addons/helpers/ViewHelper.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { randFloat } from 'three/src/math/MathUtils';
 import { buildLayout } from './engineLayout';
@@ -365,9 +366,14 @@ function animate(time, frame) {
 }
 
 const loader = new GLTFLoader();
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://unpkg.com/three@0.177.0/examples/jsm/libs/draco/');
+dracoLoader.setDecoderConfig({type: 'js'});
+dracoLoader.preload();
+loader.setDRACOLoader(dracoLoader);
 // The loader might only need the URL (but not with npm and vite)
 const boosterModelURL = new URL('/models/booster_raw.glb', import.meta.url);
-const towerModelURL = new URL('/models/tower_raw.glb', import.meta.url);
+const towerModelURL = new URL('/models/tower_compressed.glb', import.meta.url);
 const chopstickRModelURL = new URL('/models/chopstick_raw.glb', import.meta.url);
 const gridfinModelURL = new URL('/models/gridfin_raw.glb', import.meta.url);
 const raptorModelURL = new URL('/models/raptor_raw.glb', import.meta.url);
@@ -398,8 +404,8 @@ loader.load(boosterModelURL.href, (root) => {
 	eltLoaded++;
   },
   (xhr) => {
-	DOMSimErr.style.visibility = "visible";
-	DOMSimErr.innerText = ( xhr.loaded / xhr.total * 100 ).toFixed(1) + '% loaded';
+	// DOMSimErr.style.visibility = "visible";
+	// DOMSimErr.innerText = ( xhr.loaded / xhr.total * 100 ).toFixed(1) + '% loaded';
   },
   (err) => {
 	DOMSimErr.style.visibility = "visible";
@@ -427,8 +433,8 @@ for(let i = 0 ; i < 4 ; i++){
 		eltLoaded++;
 	  },
 	  (xhr) => {
-		DOMSimErr.style.visibility = "visible";
-		DOMSimErr.innerText = ( xhr.loaded / xhr.total * 100 ).toFixed(1) + '% loaded';
+		// DOMSimErr.style.visibility = "visible";
+		// DOMSimErr.innerText = ( xhr.loaded / xhr.total * 100 ).toFixed(1) + '% loaded';
 	  },
 	  (err) => {
 		DOMSimErr.style.visibility = "visible";
@@ -457,8 +463,8 @@ for(let i = 0 ; i < 3 ; i++){
 		eltLoaded++;
 	  },
 	  (xhr) => {
-		DOMSimErr.style.visibility = "visible";
-		DOMSimErr.innerText = ( xhr.loaded / xhr.total * 100 ).toFixed(1) + '% loaded';
+		// DOMSimErr.style.visibility = "visible";
+		// DOMSimErr.innerText = ( xhr.loaded / xhr.total * 100 ).toFixed(1) + '% loaded';
 	  },
 	  (err) => {
 		DOMSimErr.style.visibility = "visible";
@@ -486,8 +492,8 @@ for(let i = 0 ; i < 10 ; i++){
 		eltLoaded++;
 	  },
 	  (xhr) => {
-		DOMSimErr.style.visibility = "visible";
-		DOMSimErr.innerText = ( xhr.loaded / xhr.total * 100 ).toFixed(1) + '% loaded';
+		// DOMSimErr.style.visibility = "visible";
+		// DOMSimErr.innerText = ( xhr.loaded / xhr.total * 100 ).toFixed(1) + '% loaded';
 	  },
 	  (err) => {
 		DOMSimErr.style.visibility = "visible";
@@ -513,6 +519,7 @@ loader.load(towerModelURL.href, (root) => {
 		})
 	})
 
+	
 	// Adding lights
 	const towerLight = new THREE.SpotLight(0xffffff, 10, 30000);
 	towerLight.decay = 0;
@@ -523,12 +530,14 @@ loader.load(towerModelURL.href, (root) => {
 	scene.add(root.scene);
 	DOMSimErr.style.visibility = "hidden";
 	eltLoaded++;
+
   },
   (xhr) => {
 	DOMSimErr.style.visibility = "visible";
 	DOMSimErr.innerText = ( xhr.loaded / xhr.total * 100 ).toFixed(1) + '% loaded';
   },
   (err) => {
+	console.log(err);
 	DOMSimErr.style.visibility = "visible";
 	DOMSimErr.innerText = err
   }

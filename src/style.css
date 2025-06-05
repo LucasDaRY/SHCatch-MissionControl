@@ -193,6 +193,8 @@ footer{
 
 
 /* Temporary, only for interface development */
-.error{
+#MasterOffline,
+#TowerOffline,
+#SHOffline{
     display: none;
 }
