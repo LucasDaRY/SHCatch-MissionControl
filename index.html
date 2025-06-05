@@ -17,8 +17,8 @@
               }
             }
         </script>
-    <script type="module" crossorigin src="/SHCatch-MissionControl/assets/index-BQrw0uBR.js"></script>
-    <link rel="stylesheet" crossorigin href="/SHCatch-MissionControl/assets/index-_5OiP_Xo.css">
+    <script type="module" crossorigin src="/SHCatch-MissionControl/assets/index-L0Rif2A0.js"></script>
+    <link rel="stylesheet" crossorigin href="/SHCatch-MissionControl/assets/index-DAz69nwV.css">
   </head>
       <!-- TODO
     I need to know if the display is in landscape. I need it to be in landscape
@@ -88,11 +88,13 @@
                         type="number"
                         id="TCmdChopL"
                         name="TCmdChopL"
+                        step="0.01"
                         placeholder="Pos(deg) L" />
                     <input class="TCmd"
                         type="number"
                         id="TCmdChopR"
                         name="TCmdChopR"
+                        step="0.01"
                         placeholder="Pos(deg) R" />
                     <input type="submit" value="Send command" />
                 </form>
@@ -100,47 +102,63 @@
             <canvas id="3DRight"></canvas>
         </div>
         <footer>
-            <canvas id="engineLayout" width="300" height="300"></canvas>
-            <div id="SHData">
-                <h4>Altitude : <span id="SHAltitude">0</span> km</h4>
-                <h4>Speed : <span id="SHVelocity">0</span> km/s</h4>
-                <span id="SHPropLevelPlace">
-                    <h4>Props: </h4>
-                    <input id="SHPropLevel" type="range" step="0.1" value="10"></input>
-                </span>
+            <div id="LeftData">
+                <canvas id="engineLayout" width="300" height="300"></canvas>
+                <div id="SHData">
+                    <h4>Altitude : <span id="SHAltitude">0</span> km</h4>
+                    <h4>Speed : <span id="SHVelocity">0</span> km/s</h4>
+                    <label id="SHPropLevelPlace">
+                        Props:
+                        <progress id="SHPropLevel" max="100" value="20"></progress>
+                    </label>
+                </div>
             </div>
             <div id="MissionData">
                 <h2>Retour de Super Heavy</h2>
                 <h2>T+<span id="clock">00:00</span></h2>
-                <h4>DAVID Lucas</h4>
-                <h5>Polytech Le Creusot</h5>
+                <a href="https://www.lucas-david-ry.com"><h4>DAVID Lucas</h4></a>
+                <a href="https://polytech.ube.fr"><h5>Polytech Le Creusot</h5></a>
             </div>
-            <div id="">
-                <div>
-                    <h3>Phase : <span id="phaseOfFlight"></span></h3>
-                    <h3>Source : <span id="dataSource"></span></h3>
+            <div id="RightData">
+                <div id="RightDataTop"> <!--Above-->
+                    <h3>Phase : <span id="phaseOfFlight">CAUGHT</span></h3>
+                    <h3>Source : <span id="dataSource">SIMULATION</span></h3>
                 </div>
-                <div>
+                <div id="RightDataBottom"> <!--Under-->
+                    <div id="Views">
+                        <div>
+                            <h3>Left view : </h3>
+                            <button class="left_view_button" name="Booster" autocomplete="off" disabled="true">Booster Fixed</button>
+                            <button class="left_view_button" name="Orbit">Orbit</button>
+                        </div>
+                        <div>
+                            <h3>Right view : </h3>
+                            <button class="right_view_button" name="Catch zone" autocomplete="off" disabled="true">Catch Zone</button>
+                            <button class="right_view_button" name="Trajectory" autocomplete="off">Trajectory</button>
+                        </div>
+                    </div>
+                    <div id="IPs">
+                        <form id="TowerForm" autocomplete="on">
+                            <input class="IPInput"
+                                id="ESP_IP"
+                                type="text"
+                                minlength="7"
+                                maxlength="15"
+                                name="EspMasterIP"
+                                pattern="192\.168\.[0-9]{1,3}\.[0-9]{1,3}"
+                                placeholder="ESP IP" />
+                            <input class="IPInput"
+                                id="SimulationIP"
+                                name="LocalSimulationIP"
+                                placeholder="Simulation IP" />
+                            <input type="submit" value="Connect" />
+                        </form>
+                    </div>
 
                 </div>
             </div>
         </footer>
 
-        <!--    <h1>Web socket test</h1>
-
-        <p>Capteur ultrason : <span id="TCUltrason"></span></p>
-        <p>Commande position moteur :</p>
-        <form id="form1">
-            <input class="TCmd"
-                type="number"
-                id="TCmd1"
-                name="TCmd"
-                placeholder="Pos(deg)" />
-        </form>
-
-
-        <p id="yes" style="">?</p>-->
-    <script src="/src/engineLayout.js"></script>
-    <!--<script src="/src/coms.js"></script>-->
+    <script src="/src/coms.js"></script>
   </body>
 </html>
