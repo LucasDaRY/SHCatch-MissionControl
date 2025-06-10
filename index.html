@@ -17,8 +17,8 @@
               }
             }
         </script>
-    <script type="module" crossorigin src="/SHCatch-MissionControl/assets/index-L0Rif2A0.js"></script>
-    <link rel="stylesheet" crossorigin href="/SHCatch-MissionControl/assets/index-DAz69nwV.css">
+    <script type="module" crossorigin src="/SHCatch-MissionControl/assets/index-1cGhHfUS.js"></script>
+    <link rel="stylesheet" crossorigin href="/SHCatch-MissionControl/assets/index-CEfe5SNt.css">
   </head>
       <!-- TODO
     I need to know if the display is in landscape. I need it to be in landscape
@@ -115,7 +115,10 @@
             </div>
             <div id="MissionData">
                 <h2>Retour de Super Heavy</h2>
-                <h2>T+<span id="clock">00:00</span></h2>
+                <div>
+                    <h2 id="loading">Loading : <span id="loadingUnderway">0</span>/<span id="loadingTotal">20</span></h2>
+                    <h2 id="missionTime">T+<span id="clock">00:00</span></h2>
+                </div>
                 <a href="https://www.lucas-david-ry.com"><h4>DAVID Lucas</h4></a>
                 <a href="https://polytech.ube.fr"><h5>Polytech Le Creusot</h5></a>
             </div>
@@ -138,27 +141,32 @@
                         </div>
                     </div>
                     <div id="IPs">
-                        <form id="TowerForm" autocomplete="on">
-                            <input class="IPInput"
-                                id="ESP_IP"
-                                type="text"
-                                minlength="7"
-                                maxlength="15"
-                                name="EspMasterIP"
-                                pattern="192\.168\.[0-9]{1,3}\.[0-9]{1,3}"
-                                placeholder="ESP IP" />
-                            <input class="IPInput"
-                                id="SimulationIP"
-                                name="LocalSimulationIP"
-                                placeholder="Simulation IP" />
+                        <form id="IPForm" autocomplete="on">
+                            <label>ESP_IP
+                                <input class="IPInput"
+                                    id="ESP_IP"
+                                    type="text"
+                                    minlength="7"
+                                    maxlength="15"
+                                    name="EspMasterIP"
+                                    pattern="192\.168\.[0-9]{1,3}\.[0-9]{1,3}"
+                                    value="192.168.0.69"
+                                    placeholder="ESP IP" />
+                            </label>
+                            <label>Simulation IP
+                                <input class="IPInput"
+                                    id="SimulationIP"
+                                    name="LocalSimulationIP"
+                                    value="localhost:42069"
+                                    placeholder="Simulation IP" />
+                            </label>
                             <input type="submit" value="Connect" />
                         </form>
                     </div>
-
                 </div>
             </div>
         </footer>
-
-    <script src="/src/coms.js"></script>
+    <!--Will need a simple "master script" to use all modules, and use modules when others are offline-->
+    <!--<script src="/src/coms.js"></script>-->
   </body>
 </html>
