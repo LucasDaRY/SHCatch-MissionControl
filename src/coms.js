@@ -1,7 +1,10 @@
-let url = `ws://192.168.52.69/ws`// Once Not local, use : `ws://${window.location.hostname}/ws`;
-let sseUrl = `//192.168.52.69/events`
+const IpFormDOM = document.getElementById("IPForm");
+const EspIpDOM = document.getElementById("ESP_IP");
+
+let url = `ws://${EspIpDOM.value}/ws`// Once Not local, use : `ws://${window.location.hostname}/ws`;
+let sseUrl = `//${EspIpDOM.value}/events`
 let websocket;
-let events = new EventSource(sseUrl);
+let events = null;
 
 const ultrasonicDistance = document.getElementById("ultrasonic_reads");
 const chopPosL = document.getElementById("chop_position_L");
@@ -27,9 +30,81 @@ function initWS(){
     websocket.onmessage = onMessageWS;
 }
 
-window.addEventListener("load", (_) => {initWS()});
+function initSSE(){
+    if(events){
+        events.close();
+        events = null;
+    }
 
+    events = new EventSource(sseUrl);
 
+    events.addEventListener("message", (e) => {
+        console.log("Event from " + e.target.url);
+        let JSON_from_master = JSON.parse(e.data);
+        // About Tower
+        if(!JSON_from_master.isTowerOnline){
+            // Tower is offline
+            // Shows error popup and not processing other variables
+            towerOffline.style.visibility = "visible"; 
+        } else {
+            // Tower sends telemetry
+            // Hides error popup, and processes all awaited data
+            towerOffline.style.visibility = "hidden"; 
+        
+            chopPosR.innerText = JSON_from_master.chopPosR; // Given value OR "undefined" idc
+            chopPosL.innerText = JSON_from_master.chopPosL;
+            ultrasonicDistance.innerText = JSON_from_master.ultrasonic_reads.toFixed(2);
+            cpt_PS_RF.innerText = JSON_from_master.proxiRF;
+            cpt_PS_RN.innerText = JSON_from_master.proxiRN;
+            cpt_PS_LN.innerText = JSON_from_master.proxiLN;
+            cpt_PS_LF.innerText = JSON_from_master.proxiLF;
+        }
+
+        // About SH
+        if(!JSON_from_master.isSHOnline){
+            shOffline.style.visibility = "visible";
+        } else {
+            shOffline.style.visibility = "hidden";
+
+            // The (_*1) makes null become 0
+            cpt_Pos_X.innerText = (JSON_from_master.posX*1).toFixed(2);
+            cpt_Pos_Y.innerText = (JSON_from_master.posY*1).toFixed(2);
+            cpt_Pos_Z.innerText = (JSON_from_master.posZ*1).toFixed(2);
+            cpt_Rot_X.innerText = (JSON_from_master.rotX*1).toFixed(2);
+            cpt_Rot_Y.innerText = (JSON_from_master.rotY*1).toFixed(2);
+            cpt_Rot_Z.innerText = (JSON_from_master.rotZ*1).toFixed(2);
+        }
+    });
+
+    events.addEventListener("error", (err) => {
+        err.preventDefault();
+        // Go fuck yourself I guess
+    })
+}
+
+IpFormDOM.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(IpFormDOM);
+    if(typeof(formData.get("EspMasterIP")) !== "undefined"){
+        url = `ws://${formData.get("EspMasterIP")}/ws`;
+        sseUrl = `//${formData.get("EspMasterIP")}/events`;
+    }
+
+    // Restarts connections to the ESP (WS and SSE)
+    websocket.close();
+    initWS();
+    initSSE();
+})
+
+function init(){
+    initWS();
+    initSSE();
+}
+
+//window.addEventListener("load", (_) => init());
+
+init();
 
 
 function onOpenWS(event){
@@ -39,54 +114,13 @@ function onOpenWS(event){
 
 function onCloseWS(event){
     console.log("WebSocket lost... Retrying");
-    setTimeout(initWS, 500);
     masterOffline.style.visibility = "visible";
 }
 
-events.addEventListener("message", (e) => {
-    console.log(e.data);
-    let JSON_from_master = JSON.parse(e.data);
-    // About Tower
-    if(!JSON_from_master.isTowerOnline){
-        // Tower is offline
-        // Shows error popup and not processing other variables
-        towerOffline.style.visibility = "visible"; 
-    } else {
-        // Tower sends telemetry
-        // Hides error popup, and processes all awaited data
-        towerOffline.style.visibility = "hidden"; 
-    
-        chopPosR.innerText = JSON_from_master.chopPosR; // Given value OR "undefined" idc
-        chopPosL.innerText = JSON_from_master.chopPosL;
-        ultrasonicDistance.innerText = JSON_from_master.ultrasonic_reads.toFixed(2);
-        cpt_PS_RF.innerText = JSON_from_master.proxiRF;
-        cpt_PS_RN.innerText = JSON_from_master.proxiRN;
-        cpt_PS_LN.innerText = JSON_from_master.proxiLN;
-        cpt_PS_LF.innerText = JSON_from_master.proxiLF;
-    }
 
-    // About SH
-    if(!JSON_from_master.isSHOnline){
-        shOffline.style.visibility = "visible";
-    } else {
-        shOffline.style.visibility = "hidden";
-
-        // The (_*1) makes null become 0
-        cpt_Pos_X.innerText = (JSON_from_master.posX*1).toFixed(2);
-        cpt_Pos_Y.innerText = (JSON_from_master.posY*1).toFixed(2);
-        cpt_Pos_Z.innerText = (JSON_from_master.posZ*1).toFixed(2);
-        cpt_Rot_X.innerText = (JSON_from_master.rotX*1).toFixed(2);
-        cpt_Rot_Y.innerText = (JSON_from_master.rotY*1).toFixed(2);
-        cpt_Rot_Z.innerText = (JSON_from_master.rotZ*1).toFixed(2);
-    }
-});
 function onMessageWS(event){
     console.log("received WS : " + event.data);
-
-    
 }
-
-
 
 
 let towerForm = document.getElementById("TowerForm");
@@ -107,13 +141,17 @@ shForm.addEventListener("submit", (event) => {
 
 function towerFormSend(){
     const formData = new FormData(towerForm);
-    let JSON_to_master = {
-        destination : "Tower",
-        CmdChopL : parseFloat(formData.get("TCmdChopL")), // This is the name of the input in the form
-        CmdChopR : parseFloat(formData.get("TCmdChopR"))
-    };
-    console.log(JSON_to_master);
-    websocket.send(JSON.stringify(JSON_to_master));
+    if(parseFloat(formData.get("TCmdChopL")) <= parseFloat(formData.get("TCmdChopR"))){
+        let JSON_to_master = {
+            destination : "Tower",
+            CmdChopL : parseFloat(formData.get("TCmdChopL")), // This is the name of the input in the form
+            CmdChopR : parseFloat(formData.get("TCmdChopR"))
+        };
+        console.log(JSON_to_master);
+        websocket.send(JSON.stringify(JSON_to_master));
+    } else {
+        console.log("Chopsticks positions are not possible. Command not sent.");
+    }
 }
 
 function shFormSend(){
