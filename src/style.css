@@ -78,7 +78,8 @@ a:hover{
 }
 
 
-form{
+#TowerForm,
+#SHForm{
     display: flex;
     flex-direction: column;
     width: 10vw;
@@ -132,9 +133,10 @@ footer{
 }
 
 
-#SHPropLevelPlace{
+label{
     display: flex;
     flex-direction: row;
+    gap: 4px;
 }
 
 #SHPropLevel[value]{
@@ -165,6 +167,13 @@ footer{
     align-items: center;
 }
 
+/* This is updated via JS to hide loading and show time once loading is complete */
+#loading{
+    display: block;
+}
+#missionTime{
+    display: none;
+}
 
 #RightData{
     margin: 1vh;
@@ -187,6 +196,19 @@ footer{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+
+#IPs{
+    width: 20vw;
+}
+#IPForm{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
 }
 
 
