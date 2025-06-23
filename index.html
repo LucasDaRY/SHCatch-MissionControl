@@ -17,6 +17,13 @@
               }
             }
         </script>
+    <style>
+      /* Temporary style */
+      #SHForm, #TowerForm, #ESP_IP {
+        display: none;
+      }
+      
+    </style>
   </head>
       <!-- TODO
     I need to know if the display is in landscape. I need it to be in landscape
@@ -112,7 +119,7 @@
                 </div>
             </div>
             <div id="MissionData">
-                <h2>Retour de Super Heavy</h2>
+                <h2>PFR - Super Heavy Catch</h2>
                 <div>
                     <h2 id="loading">Loading : <span id="loadingUnderway">0</span>/<span id="loadingTotal">20</span></h2>
                     <h2 id="missionTime">T+<span id="clock">00:00</span></h2>
@@ -122,8 +129,8 @@
             </div>
             <div id="RightData">
                 <div id="RightDataTop"> <!--Above-->
-                    <h3>Phase : <span id="phaseOfFlight">CAUGHT</span></h3>
-                    <h3>Source : <span id="dataSource">SIMULATION</span></h3>
+                    <h3>Phase : <span id="phaseOfFlight">IN FLIGHT</span></h3>
+                    <h3>Source : <span id="dataSource">SIMULATION/HARDWARE</span></h3>
                 </div>
                 <div id="RightDataBottom"> <!--Under-->
                     <div id="Views">
