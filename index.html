@@ -9,6 +9,13 @@
         <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <link rel="icon" type="image/x-icon" href="/SHCatch-MissionControl/favicon.png">
 
+    <style>
+      /* Temporary style */
+      #SHForm, #TowerForm, #ESP_IP {
+        display: none;
+      }
+      
+    </style>
         <script type="importmap">
             {
               "imports": {
@@ -114,7 +121,7 @@
                 </div>
             </div>
             <div id="MissionData">
-                <h2>Retour de Super Heavy</h2>
+                <h2>PFR - Super Heavy Catch</h2>
                 <div>
                     <h2 id="loading">Loading : <span id="loadingUnderway">0</span>/<span id="loadingTotal">20</span></h2>
                     <h2 id="missionTime">T+<span id="clock">00:00</span></h2>
@@ -124,8 +131,8 @@
             </div>
             <div id="RightData">
                 <div id="RightDataTop"> <!--Above-->
-                    <h3>Phase : <span id="phaseOfFlight">CAUGHT</span></h3>
-                    <h3>Source : <span id="dataSource">SIMULATION</span></h3>
+                    <h3>Phase : <span id="phaseOfFlight">IN FLIGHT</span></h3>
+                    <h3>Source : <span id="dataSource">SIMULATION/HARDWARE</span></h3>
                 </div>
                 <div id="RightDataBottom"> <!--Under-->
                     <div id="Views">
